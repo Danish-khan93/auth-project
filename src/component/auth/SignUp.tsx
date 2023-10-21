@@ -1,6 +1,6 @@
-import { Typography, Box, TextField } from "@mui/material";
+import { Button, Typography, Box, TextField } from "@mui/material";
 import { useForm } from "react-hook-form";
-
+import {Link} from "react-router-dom"
 type SIGNUP = {
   firstName: string;
   lastName: string;
@@ -9,7 +9,7 @@ type SIGNUP = {
 };
 
 const SignUp = () => {
-  const { register } = useForm<SIGNUP>({
+  const { register, handleSubmit, formState } = useForm<SIGNUP>({
     defaultValues: {
       firstName: "",
       lastName: "",
@@ -17,11 +17,19 @@ const SignUp = () => {
       password: "",
     },
   });
+  const { errors } = formState;
 
+  const onSubmit = (data: SIGNUP) => {
+    console.log(data);
+  };
   return (
-    <Box>
-      <Typography>SING UP</Typography>
-      <form className="flex flex-col items-center gap-5">
+    <Box className="flex flex-col items-center gap-5">
+      <Typography variant="h3">SING UP</Typography>
+      <form
+      noValidate
+        onSubmit={handleSubmit(onSubmit)}
+        className="flex flex-col items-center gap-5"
+      >
         <TextField
           size="small"
           label="first name"
@@ -29,6 +37,8 @@ const SignUp = () => {
           {...register("firstName", {
             required: { value: true, message: "this field is requird" },
           })}
+          error={!errors}
+          helperText={errors?.firstName?.message}
         />
         <TextField
           size="small"
@@ -37,6 +47,8 @@ const SignUp = () => {
           {...register("lastName", {
             required: { value: true, message: "this field is requird" },
           })}
+          error={!errors}
+          helperText={errors?.lastName?.message}
         />
         <TextField
           size="small"
@@ -45,6 +57,8 @@ const SignUp = () => {
           {...register("email", {
             required: { value: true, message: "this field is requird" },
           })}
+          error={!errors}
+          helperText={errors?.email?.message}
         />
         <TextField
           size="small"
@@ -53,8 +67,13 @@ const SignUp = () => {
           {...register("password", {
             required: { value: true, message: "this field is requird" },
           })}
+          error={!errors}
+          helperText={errors?.password?.message}
         />
+
+        <Button type="submit">SIGN UP</Button>
       </form>
+      <Typography>if you are already signup ? <Link to={"/signin"}>SignIn</Link></Typography>
     </Box>
   );
 };
